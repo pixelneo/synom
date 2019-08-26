@@ -1,5 +1,5 @@
 # Synom
-A Plugin to ViM which prints synonyms for the current word in buffer.
+A Plugin to Vim which prints synonyms for the current word in buffer.
 Uses [WordsAPI](https://www.wordsapi.com) (there are 2500 free requests a month).
 
 ## Instalation
