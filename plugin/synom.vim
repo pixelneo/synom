@@ -10,5 +10,7 @@ sys.path.insert(0, python_root_dir)
 import synom
 EOF
 function! Synom()
-    python3 synom.synom()
+    python3 synom.synoms()
 endfunction
+command! -nargs=0 Syn call Synom()
+
