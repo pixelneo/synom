@@ -10,3 +10,4 @@ Add that to `.vimrc/bundle/synom/data/my-key` (e.g. `n58234s43gmshd2ef5sa54fh042
 
 ## Usage
 In Vim, write `:Syn` in normal mode to find the synonyms.
+![usage](https://media.giphy.com/media/SsfjIS3pcY8aP2TkEy/giphy.gif)
