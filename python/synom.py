@@ -28,7 +28,7 @@ def synoms():
             print('Synom ERROR: Error with retriving data from Words API server')
             exit()
         obj = json.loads(data)
-        if obj not None and isinstance(obj, dict) and 'synonyms' in obj.keys():
+        if obj is not None and isinstance(obj, dict) and 'synonyms' in obj.keys():
             return ', '.join(obj['synonyms'])
         else
             return '--- No synonyms ---'
