@@ -30,7 +30,7 @@ def synoms():
         obj = json.loads(data)
         if obj is not None and isinstance(obj, dict) and 'synonyms' in obj.keys():
             return ', '.join(obj['synonyms'])
-        else
+        else:
             return '--- No synonyms ---'
 
     print(_get_synoms(_get_current_word()))
