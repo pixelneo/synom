@@ -24,7 +24,7 @@ def synoms():
         try:
             with requests.request('GET', url, headers=headers) as resp:
                 data = resp.text
-        except requests.exceptions.RequestException e:
+        except requests.exceptions.RequestException as e:
             print('Synom ERROR: Error with retriving data from Words API server')
             exit()
         obj = json.loads(data)
