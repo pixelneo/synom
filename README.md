@@ -2,6 +2,10 @@
 A Plugin to Vim which prints synonyms for the current word in buffer.
 Uses [WordsAPI](https://www.wordsapi.com) (there are 2500 free requests a month).
 
+### Work in progress
+This is very much work in progress.
+Although the plugin works, its commands may change in future versions.
+
 ## Instalation
 If you use Vundle, add `Plugin 'pixelneo/synom'` to your `.vimrc` file.
 
