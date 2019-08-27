@@ -3,7 +3,22 @@
 def synoms():
     import vim, requests, json, os, builtins
     class mydict(dict):
-        pass
+        def set_from(self, key, dict2, key2):
+            '''
+                Sets a value from `dict2[key2]` to `key` if `key2` exists in dict2, otherwise does nothing.
+            '''
+            if k2 in dict2.keys():
+                self[key] = dict2[key2]
+
+        def set_from_string(self, key, dict2, key2):
+            '''
+                Sets a concatenation of values from `dict2[key2]` to `key` if `key2` exists in dict2, otherwise does nothing.
+            '''
+            if k2 in dict2.keys():
+                self[key] = ', '.join(dict2[key2])
+
+    builtins.dict = mydict
+
     def _get_my_key():
         plugin_root_dir = vim.eval('s:plugin_root_dir')
         file = os.path.normpath(os.path.join(plugin_root_dir, '..', 'data', 'my-key'))
@@ -40,11 +55,7 @@ def synoms():
             return '--- No synonyms ---'
 
     def _get_it_all(word):
-        def set_value(d, d2, k, k2):
-            if k2 in d2:
-                d[k] = d2
-
-        out_list = {}
+        out_list = dict() 
         obj = _get_data_from_server(word)
         if obj is not None and isinstance(obj, dict) and isinstance(obj['results'], list):
 
@@ -52,10 +63,17 @@ def synoms():
             out_list['meanings'] = []
 
             for meaning in obj['results']:
-                x = {}
-                x['def'] = meaning['definition']
-                x['s
-                out_list['meanings'].append(
+                x = dict() 
+                x.set_from('def', meaning, 'definition')
+                x.set_from('pos', meaning, 'partOfSpeech')
+                x.set_from_string('synonyms', meaning, 'synonyms')
+                x.set_from_string('derivation', meaning, 'derivation')
+                x.set_from_string('examples', meaning, 'examples')
+                out_list['meanings'].append(x)
+
+            mns = '\n------------------------\n'.join([meaning for meaning in out_list['meanings'])
+            result = '{}: {}\n{}'.format('Word', out_list['word'], mns)
+
 
 
 
