@@ -77,6 +77,8 @@ def synoms():
             return result
         except TypeError as e:
             return '--- Error when parsin response ---'
+        except KeyError as e:
+            return '--- No data found ---'
             
 
     with open('/tmp/Synom-temp-file', 'w') as f:
