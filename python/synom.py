@@ -2,7 +2,9 @@
 def get_handler():
     import vim
     import requests, json, os, builtins
-
+    class IAmExiting(Exception):
+        pass
+    
     class mydict(dict):
         def set_from(self, key, dict2, key2):
             '''
@@ -32,7 +34,7 @@ def get_handler():
         return str(key.strip())
 
     def _get_current_word():
-        return vim.eval("expand(\"<cword>\")")
+        return vim.eval("expand(\"<cword>\")").lower()
 
     class Synom:
         def __init__(self, word):
@@ -56,7 +58,7 @@ def get_handler():
             obj = self._get_data_from_server('synonyms')
             try:
                 return ', '.join(obj['synonyms'])
-            except TypeError, KeyError:
+            except (TypeError, KeyError) as e:
                 return '--- No synonyms ---'
 
         def get_it_all(self):
@@ -75,15 +77,15 @@ def get_handler():
                     x.set_from_string('examples', meaning, 'examples')
                     out_list['meanings'].append(x)
 
-                t = ['\n'.join(['{}: {}'.format(k.upper(),v) for k,v in meaning.items()]) for meaning in out_list['meanings']]
-                mns = '\n----------------------------------\n\n'.join(t)
+                t = ['\n'.join(['{}:  {}'.format(k.upper(),v) for k,v in meaning.items()]) for meaning in out_list['meanings']]
+                mns = ''.join(['\n',32*'-','\n\n']).join(t)
                 result = '{}: {}\n\n{}'.format('Word', out_list['word'], mns)
                 return result
             except TypeError as e:
                 return '--- Error when parsin response ---'
             except KeyError as e:
                 print('--- Word has not been found ---')
-                exit()
+                raise IAmExiting
 
     class Handler:
         @staticmethod
@@ -93,10 +95,14 @@ def get_handler():
 
         @staticmethod
         def definitions():
-            handler = Synom(_get_current_word())
-            with open('/tmp/Synom-temp-file', 'w') as f:
-                f.write(handler.get_it_all())
-            vim.command("set buftype=nofile")
-            vim.command("pedit! /tmp/Synom-temp-file")
+            try:
+                handler = Synom(_get_current_word())
+                with open('/tmp/Synom-temp-file', 'w') as f:
+                    f.write(handler.get_it_all())
+                vim.command("set buftype=nofile")
+                vim.command("vertical pedit! /tmp/Synom-temp-file")
+                vim.command("vertical resize -25")
+            except IAmExiting as e:
+                pass
     return Handler
 
