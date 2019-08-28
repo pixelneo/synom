@@ -10,7 +10,7 @@ sys.path.insert(0, python_root_dir)
 import synom
 EOF
 function! Synonyms()
-    python3 synom.Synom.synonyms()
+    python3 synom.get_handler('sy.synonyms()
 endfunction
 
 function! Definitions()

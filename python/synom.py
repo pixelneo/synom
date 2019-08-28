@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-
-class Synom():
+def get_handler():
     import vim
     import requests, json, os, builtins
+
     class mydict(dict):
         def set_from(self, key, dict2, key2):
             '''
@@ -19,7 +19,7 @@ class Synom():
                 self[key] = ', '.join(dict2[key2])
 
     builtins.dict = mydict
-    @staticmethod
+
     def _get_my_key():
         plugin_root_dir = vim.eval('s:plugin_root_dir')
         file = os.path.normpath(os.path.join(plugin_root_dir, '..', 'data', 'my-key'))
@@ -31,68 +31,72 @@ class Synom():
             exit()
         return str(key.strip())
 
-    @staticmethod
     def _get_current_word():
         return vim.eval("expand(\"<cword>\")")
 
-    @staticmethod
-    def _get_data_from_server(word, what=''):
-        headers = {}
-        headers['x-rapidapi-host'] = 'wordsapiv1.p.rapidapi.com'
-        headers['x-rapidapi-key'] = _get_my_key()
-        url = 'https://wordsapiv1.p.rapidapi.com/words/{}/{}'.format(word, what)
-        try:
-            with requests.request('GET', url, headers=headers) as resp:
-                data = resp.text
-        except requests.exceptions.RequestException as e:
-            print('Synom ERROR: Error occured when retrieving data from Words API server')
-            exit()
-        obj = json.loads(data)
-        return obj 
+    class Synom:
+        def __init__(self, word):
+            self.word = word
 
-    @staticmethod
-    def _get_synoms(word):
-        obj = _get_data_from_server(word, 'synonyms')
-        if obj is not None and isinstance(obj, dict) and 'synonyms' in obj.keys():
-            return ', '.join(obj['synonyms'])
-        else:
-            return '--- No synonyms ---'
+        def _get_data_from_server(what=''):
+            headers = {}
+            headers['x-rapidapi-host'] = 'wordsapiv1.p.rapidapi.com'
+            headers['x-rapidapi-key'] = _get_my_key()
+            url = 'https://wordsapiv1.p.rapidapi.com/words/{}/{}'.format(self.word, what)
+            try:
+                with requests.request('GET', url, headers=headers) as resp:
+                    data = resp.text
+            except requests.exceptions.RequestException as e:
+                print('Synom ERROR: Error occured when retrieving data from Words API server')
+                exit()
+            obj = json.loads(data)
+            return obj 
 
-    @staticmethod
-    def _get_it_all(word):
-        out_list = dict() 
-        obj = _get_data_from_server(word)
-        try:
-            out_list['word'] = obj['word']      # add searched word
-            out_list['meanings'] = []
+        def get_synoms():
+            obj = _get_data_from_server(self.word, 'synonyms')
+            if obj is not None and isinstance(obj, dict) and 'synonyms' in obj.keys():
+                return ', '.join(obj['synonyms'])
+            else:
+                return '--- No synonyms ---'
 
-            for meaning in obj['results']:
-                x = dict() 
-                x.set_from('def', meaning, 'definition')
-                x.set_from('pos', meaning, 'partOfSpeech')
-                x.set_from_string('synonyms', meaning, 'synonyms')
-                x.set_from_string('derivation', meaning, 'derivation')
-                x.set_from_string('examples', meaning, 'examples')
-                out_list['meanings'].append(x)
+        def get_it_all():
+            out_list = dict() 
+            obj = _get_data_from_server(self.word)
+            try:
+                out_list['word'] = obj['word']      # add searched word
+                out_list['meanings'] = []
 
-            t = ['\n'.join(['{}: {}'.format(k.upper(),v) for k,v in meaning.items()]) for meaning in out_list['meanings']]
-            mns = '\n----------------------------------\n\n'.join(t)
-            result = '{}: {}\n\n{}'.format('Word', out_list['word'], mns)
-            return result
-        except TypeError as e:
-            return '--- Error when parsin response ---'
-        except KeyError as e:
-            print('--- Word has not been found ---')
-            exit()
+                for meaning in obj['results']:
+                    x = dict() 
+                    x.set_from('def', meaning, 'definition')
+                    x.set_from('pos', meaning, 'partOfSpeech')
+                    x.set_from_string('synonyms', meaning, 'synonyms')
+                    x.set_from_string('derivation', meaning, 'derivation')
+                    x.set_from_string('examples', meaning, 'examples')
+                    out_list['meanings'].append(x)
 
-    @staticmethod
-    def synonyms():
-        print(_get_synoms(_get_current_word()))
+                t = ['\n'.join(['{}: {}'.format(k.upper(),v) for k,v in meaning.items()]) for meaning in out_list['meanings']]
+                mns = '\n----------------------------------\n\n'.join(t)
+                result = '{}: {}\n\n{}'.format('Word', out_list['word'], mns)
+                return result
+            except TypeError as e:
+                return '--- Error when parsin response ---'
+            except KeyError as e:
+                print('--- Word has not been found ---')
+                exit()
 
-    @staticmethod
-    def definitions():
-        with open('/tmp/Synom-temp-file', 'w') as f:
-            f.write(_get_it_all(_get_current_word()))
-        vim.command("set buftype=nofile")
-        vim.command("pedit! /tmp/Synom-temp-file")
+    class Handler:
+        @staticmethod
+        def synonyms():
+            handler = Synom(_get_current_word())
+            print(handler.get_synoms())
+
+        @staticmethod
+        def definitions():
+            handler = Synom(_get_current_word())
+            with open('/tmp/Synom-temp-file', 'w') as f:
+                f.write(handler.get_it_all())
+            vim.command("set buftype=nofile")
+            vim.command("pedit! /tmp/Synom-temp-file")
+    return Handler
 
