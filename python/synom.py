@@ -1,20 +1,21 @@
 #!/usr/bin/env python3
 
 def synoms():
-    import vim, requests, json, os, builtins
+    import vim
+    import requests, json, os, builtins
     class mydict(dict):
         def set_from(self, key, dict2, key2):
             '''
                 Sets a value from `dict2[key2]` to `key` if `key2` exists in dict2, otherwise does nothing.
             '''
-            if k2 in dict2.keys():
+            if key2 in dict2.keys():
                 self[key] = dict2[key2]
 
         def set_from_string(self, key, dict2, key2):
             '''
                 Sets a concatenation of values from `dict2[key2]` to `key` if `key2` exists in dict2, otherwise does nothing.
             '''
-            if k2 in dict2.keys():
+            if key2 in dict2.keys():
                 self[key] = ', '.join(dict2[key2])
 
     builtins.dict = mydict
@@ -57,8 +58,7 @@ def synoms():
     def _get_it_all(word):
         out_list = dict() 
         obj = _get_data_from_server(word)
-        if obj is not None and isinstance(obj, dict) and isinstance(obj['results'], list):
-
+        try:
             out_list['word'] = obj['word']      # add searched word
             out_list['meanings'] = []
 
@@ -71,17 +71,17 @@ def synoms():
                 x.set_from_string('examples', meaning, 'examples')
                 out_list['meanings'].append(x)
 
-            mns = '\n------------------------\n'.join([meaning for meaning in out_list['meanings'])
-            result = '{}: {}\n{}'.format('Word', out_list['word'], mns)
-
-
-
-
-
-        else:
+            t = ['\n'.join(['{}: {}'.format(k.upper(),v) for k,v in meaning.items()]) for meaning in out_list['meanings']]
+            mns = '\n----------------------------------\n\n'.join(t)
+            result = '{}: {}\n\n{}'.format('Word', out_list['word'], mns)
+            return result
+        except TypeError as e:
             return '--- Error when parsin response ---'
             
 
+    with open('/tmp/Synom-temp-file', 'w') as f:
+        f.write(_get_it_all('example'))
     # print(_get_synoms(_get_current_word()))
     vim.command("set buftype=nofile")
     vim.command("pedit! /tmp/Synom-temp-file")
+synoms()
