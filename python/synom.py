@@ -38,7 +38,7 @@ def get_handler():
         def __init__(self, word):
             self.word = word
 
-        def _get_data_from_server(what=''):
+        def _get_data_from_server(self,what=''):
             headers = {}
             headers['x-rapidapi-host'] = 'wordsapiv1.p.rapidapi.com'
             headers['x-rapidapi-key'] = _get_my_key()
@@ -52,14 +52,14 @@ def get_handler():
             obj = json.loads(data)
             return obj 
 
-        def get_synoms():
+        def get_synoms(self):
             obj = _get_data_from_server(self.word, 'synonyms')
             if obj is not None and isinstance(obj, dict) and 'synonyms' in obj.keys():
                 return ', '.join(obj['synonyms'])
             else:
                 return '--- No synonyms ---'
 
-        def get_it_all():
+        def get_it_all(self):
             out_list = dict() 
             obj = _get_data_from_server(self.word)
             try:
