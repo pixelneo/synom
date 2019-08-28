@@ -9,8 +9,14 @@ python_root_dir = normpath(join(plugin_root_dir, '..', 'python'))
 sys.path.insert(0, python_root_dir)
 import synom
 EOF
-function! Synom()
-    python3 synom.synoms()
+function! Synonyms()
+    python3 synom.Synom.synonyms()
 endfunction
-command! -nargs=0 Syn call Synom()
+
+function! Definition()
+    python3 synom.Synom.definition()
+endfunction
+
+command! -nargs=0 SynomS call Synonyms()
+command! -nargs=0 SynomD call Definitions()
 

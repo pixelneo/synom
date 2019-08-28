@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-def synoms():
+class Synom():
     import vim
     import requests, json, os, builtins
     class mydict(dict):
@@ -19,7 +19,7 @@ def synoms():
                 self[key] = ', '.join(dict2[key2])
 
     builtins.dict = mydict
-
+    @staticmethod
     def _get_my_key():
         plugin_root_dir = vim.eval('s:plugin_root_dir')
         file = os.path.normpath(os.path.join(plugin_root_dir, '..', 'data', 'my-key'))
@@ -31,9 +31,11 @@ def synoms():
             exit()
         return str(key.strip())
 
+    @staticmethod
     def _get_current_word():
         return vim.eval("expand(\"<cword>\")")
 
+    @staticmethod
     def _get_data_from_server(word, what=''):
         headers = {}
         headers['x-rapidapi-host'] = 'wordsapiv1.p.rapidapi.com'
@@ -48,6 +50,7 @@ def synoms():
         obj = json.loads(data)
         return obj 
 
+    @staticmethod
     def _get_synoms(word):
         obj = _get_data_from_server(word, 'synonyms')
         if obj is not None and isinstance(obj, dict) and 'synonyms' in obj.keys():
@@ -55,6 +58,7 @@ def synoms():
         else:
             return '--- No synonyms ---'
 
+    @staticmethod
     def _get_it_all(word):
         out_list = dict() 
         obj = _get_data_from_server(word)
@@ -78,11 +82,17 @@ def synoms():
         except TypeError as e:
             return '--- Error when parsin response ---'
         except KeyError as e:
-            return '--- No data found ---'
-            
+            print('--- Word has not been found ---')
+            exit()
 
-    with open('/tmp/Synom-temp-file', 'w') as f:
-        f.write(_get_it_all(_get_current_word()))
-    # print(_get_synoms(_get_current_word()))
-    vim.command("set buftype=nofile")
-    vim.command("pedit! /tmp/Synom-temp-file")
+    @staticmethod
+    def synonyms():
+        print(_get_synoms(_get_current_word()))
+
+    @staticmethod
+    def definition():
+        with open('/tmp/Synom-temp-file', 'w') as f:
+            f.write(_get_it_all(_get_current_word()))
+        vim.command("set buftype=nofile")
+        vim.command("pedit! /tmp/Synom-temp-file")
+
