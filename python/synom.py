@@ -53,7 +53,7 @@ def get_handler():
             return obj 
 
         def get_synoms(self):
-            obj = _get_data_from_server(self.word, 'synonyms')
+            obj = self._get_data_from_server('synonyms')
             if obj is not None and isinstance(obj, dict) and 'synonyms' in obj.keys():
                 return ', '.join(obj['synonyms'])
             else:
@@ -61,7 +61,7 @@ def get_handler():
 
         def get_it_all(self):
             out_list = dict() 
-            obj = _get_data_from_server(self.word)
+            obj = self._get_data_from_server()
             try:
                 out_list['word'] = obj['word']      # add searched word
                 out_list['meanings'] = []
