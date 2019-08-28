@@ -84,4 +84,3 @@ def synoms():
     # print(_get_synoms(_get_current_word()))
     vim.command("set buftype=nofile")
     vim.command("pedit! /tmp/Synom-temp-file")
-synoms()
