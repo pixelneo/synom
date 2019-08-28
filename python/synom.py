@@ -54,9 +54,9 @@ def get_handler():
 
         def get_synoms(self):
             obj = self._get_data_from_server('synonyms')
-            if obj is not None and isinstance(obj, dict) and 'synonyms' in obj.keys():
+            try:
                 return ', '.join(obj['synonyms'])
-            else:
+            except TypeError, KeyError:
                 return '--- No synonyms ---'
 
         def get_it_all(self):
