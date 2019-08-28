@@ -90,7 +90,7 @@ class Synom():
         print(_get_synoms(_get_current_word()))
 
     @staticmethod
-    def definition():
+    def definitions():
         with open('/tmp/Synom-temp-file', 'w') as f:
             f.write(_get_it_all(_get_current_word()))
         vim.command("set buftype=nofile")

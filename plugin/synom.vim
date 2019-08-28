@@ -13,8 +13,8 @@ function! Synonyms()
     python3 synom.Synom.synonyms()
 endfunction
 
-function! Definition()
-    python3 synom.Synom.definition()
+function! Definitions()
+    python3 synom.Synom.definitions()
 endfunction
 
 command! -nargs=0 SynomS call Synonyms()
