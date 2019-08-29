@@ -99,7 +99,6 @@ def get_handler():
                 handler = Synom(_get_current_word())
                 with open('/tmp/Synom-temp-file', 'w') as f:
                     f.write(handler.get_it_all())
-                vim.command("set buftype=nofile")
                 vim.command("pedit! /tmp/Synom-temp-file")
             except IAmExiting as e:
                 pass
