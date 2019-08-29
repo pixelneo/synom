@@ -23,14 +23,11 @@ def get_handler():
     builtins.dict = mydict
 
     def _get_my_key():
-        plugin_root_dir = vim.eval('s:plugin_root_dir')
-        file = os.path.normpath(os.path.join(plugin_root_dir, '..', 'data', 'my-key'))
         try:
-            with open(file, 'r') as f:
-                key = f.read()
-        except FileNotFoundError as e:
-            print('Synom ERROR: File with API key not found')
-            exit()
+            key = vim.eval('g:words_api')
+        except vim.error as e:
+            print('Synom ERROR: API key has to be set in g:words_api variable.')
+            raise IAmExiting
         return str(key.strip())
 
     def _get_current_word():
@@ -50,7 +47,7 @@ def get_handler():
                     data = resp.text
             except requests.exceptions.RequestException as e:
                 print('Synom ERROR: Error occured when retrieving data from Words API server')
-                exit()
+                raise IAmExiting
             obj = json.loads(data)
             return obj 
 
@@ -90,8 +87,11 @@ def get_handler():
     class Handler:
         @staticmethod
         def synonyms():
-            handler = Synom(_get_current_word())
-            print(handler.get_synoms())
+            try:
+                handler = Synom(_get_current_word())
+                print(handler.get_synoms())
+            except IAmExiting as e:
+                pass
 
         @staticmethod
         def definitions():
@@ -100,8 +100,7 @@ def get_handler():
                 with open('/tmp/Synom-temp-file', 'w') as f:
                     f.write(handler.get_it_all())
                 vim.command("set buftype=nofile")
-                vim.command("vertical pedit! /tmp/Synom-temp-file")
-                vim.command("vertical resize -25")
+                vim.command("pedit! /tmp/Synom-temp-file")
             except IAmExiting as e:
                 pass
     return Handler

@@ -10,7 +10,13 @@ Although the plugin works, its commands may change in future versions.
 If you use Vundle, add `Plugin 'pixelneo/synom'` to your `.vimrc` file.
 
 To make the plugin work, you need an API key for WordsAPI. 
-Add that to `.vimrc/bundle/synom/data/my-key` (e.g. `n58234s43gmshd2ef5sa54fh0421p1784d1psqd25efza4f890`)
+Add this line to your `.vimrc` file:
+
+~~~
+let g:words\_api = '<your-api-key>'`
+~~~
+
+For example: `let g:words\_api = 'n58234s43gmshd2ef5sa54fh0421p1784d1psqd25efza4f890'`
 
 ## Usage
 In Vim, write `SynomD` to get information about the current word (definition of all meanings, derivation, ...) in the preview buffer.
