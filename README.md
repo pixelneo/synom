@@ -20,6 +20,7 @@ For example: `let g:words_api = 'n58234s43gmshd2ef5sa54fh0421p1784d1psqd25efza4f
 
 ## Usage
 The plugin uses several commands:
+
 | Command | Description |
 |---------|-------------|
 | SynomD | Display all inforrmation about the current word in the preview window |
