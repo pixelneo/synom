@@ -1,5 +1,5 @@
 # Synom
-A Plugin to Vim which prints synonyms or definition, POS etc. for the current word in buffer.
+A Plugin to Vim which prints definitions, synonyms, part of speech tag, derivations, and examples for the current word in buffer.
 Uses [WordsAPI](https://www.wordsapi.com) (there are 2500 free requests a day).
 
 ### Work in progress
@@ -19,7 +19,9 @@ let g:words_api = '<your-api-key>'`
 For example: `let g:words_api = 'n58234s43gmshd2ef5sa54fh0421p1784d1psqd25efza4f890'`.
 
 ## Usage
-In Vim, write `SynomD` to get information about the current word (definition of all meanings, derivation, ...) in the preview buffer.
+The plugin uses several commands:
+| Command | Description |
+|---------|-------------|
+| SynomD | Display all inforrmation about the current word in the preview window |
+| SynomS | Print all synonyms for the current word |
 
-Write `:SynomS` to find the synonyms and print them.
-<!--![usage](https://media.giphy.com/media/SsfjIS3pcY8aP2TkEy/giphy.gif)-->
