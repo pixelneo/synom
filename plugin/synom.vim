@@ -1,4 +1,7 @@
 let s:plugin_root_dir = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+if !has('python3')
+    echom 'Synom ERROR: Vim needs to be compiled with +python3, in order for Synom to work.'
+endif
 
 python3 << EOF
 import sys
