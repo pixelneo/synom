@@ -14,10 +14,10 @@ import synom
 EOF
 
 function! loader#Synonyms()
-    python3 synom.get_handler().synonyms()
+    python3 synom.synonyms()
 endfunction
 
 function! loader#Definitions()
-    python3 synom.get_handler().definitions()
+    python3 synom.definitions()
 endfunction
 
