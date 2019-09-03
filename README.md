@@ -23,6 +23,6 @@ The plugin uses several commands:
 
 | Command | Description |
 |---------|-------------|
-| SynomD | Display all inforrmation about the current word in the preview window |
+| SynomD | Display all information about the current word in the preview window |
 | SynomS | Print all synonyms for the current word |
 
