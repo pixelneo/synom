@@ -1,4 +1,4 @@
-# Synom
+# vim-synonym-lookup
 A Plugin to Vim which prints definitions, synonyms, part of speech tag, derivations, and examples for the current word in buffer.
 Uses [WordsAPI](https://www.wordsapi.com) (there are 2500 free requests a day).
 
