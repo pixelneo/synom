@@ -7,7 +7,7 @@ This is very much work in progress.
 Although the plugin works, its commands may change in future versions.
 
 ## Instalation
-If you use Vundle, add `Plugin 'pixelneo/synom'` to your `.vimrc` file.
+If you use Vundle, add `Plugin 'pixelneo/vim-synonym-lookup'` to your `.vimrc` file.
 
 To make the plugin work, you need an API key for WordsAPI. 
 Add this line to your `.vimrc` file:
